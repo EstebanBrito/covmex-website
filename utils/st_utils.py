@@ -9,20 +9,18 @@ def sidebar() -> None:
     st.sidebar.button('Servicio 3', key='3')
     st.sidebar.image('assets/logo.jpg', width=50)
 
-def markdown_h(text:str, level:int=1, widget=None) -> None:
+def markdown_h(text:str, level:int=1, ctx=st) -> None:
     h_markers = '#' * level
     markdown_text = f'{h_markers} {text} {h_markers}'
-    if widget is not None: widget.markdown(markdown_text)
-    else: st.markdown(markdown_text)
+    ctx.markdown(markdown_text)
 
-def dummy_text(paragraphs=1):
+def dummy_text(paragraphs=1, ctx=st):
     final_text = ''
     for _ in range(paragraphs):
-        final_text += lorem_ipsum
-        final_text += '\n'
-    st.write(final_text)
+        final_text += lorem_ipsum + '\n'
+    ctx.write(final_text)
 
-def person(widget, name, role, photo_path='assets/logo.jpg'):
-    widget.image(photo_path, width=50)
-    widget.markdown(f'**{name}**') # Bold
-    widget.markdown(f'_{role}_') # Italic
+def person(name, role, photo_path='assets/logo.jpg', ctx=st):
+    ctx.image(photo_path, width=50)
+    ctx.markdown(f'**{name}**') # Bold
+    ctx.markdown(f'_{role}_') # Italic
