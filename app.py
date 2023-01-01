@@ -13,9 +13,9 @@ if __name__ == '__main__':
     dummy_text()
     markdown_h('Conoce al equipo', 2)
     cols = st.columns(4)
-    person(cols[0], 'Esteban Brito', 'Científico de Datos')
-    person(cols[1], 'Daniel Cruz', 'Ingeniero de Datos')
-    person(cols[2], 'Héctor Ruiz', 'Analista de Datos')
-    person(cols[3], 'Esperanza Ek', 'Analista de Datos')
+    person('Esteban Brito', 'Científico de Datos', ctx=cols[0])
+    person('Daniel Cruz', 'Ingeniero de Datos', ctx=cols[1])
+    person('Héctor Ruiz', 'Analista de Datos', ctx=cols[2])
+    person('Esperanza Ek', 'Analista de Datos', ctx=cols[3])
 
 
