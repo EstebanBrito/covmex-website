@@ -18,16 +18,17 @@ def clean_input(input:dict) -> dict:
         input[key] = map_value(value)
     return input
 
-def predict_mort_pred(input:dict):
+def predict_mort_pred(input:dict, mocked:bool=True):
     # Preprocess input
     cleaned_input = clean_input(input)
     input_json = json.dumps(cleaned_input)
-    sleep(1)
-    return random.random()
     # Make request, get response
-    response = make_request(input_json)
+    if mocked: response_json = [ [ random.random() ] ]
+    else: response_json = make_request(input_json)
     # Preprocess response
-    return response
+    prediction = response_json # json.loads(response_json) # response_json is already a list: no need to parse it from JSON
+    prediction = prediction[0][0] # [instances][prediction_outputs]
+    return prediction
 
 def get_prediction_info(prediction):
     if prediction > 0.66:
