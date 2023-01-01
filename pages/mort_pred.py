@@ -1,6 +1,6 @@
 import streamlit as st
 from utils.st_utils import markdown_h, dummy_text, sidebar
-from utils.req_utils import predict_mort_pred
+from utils.pred_utils import predict_mort_pred, get_prediction_info
 
 # Inputs must be
 # SEXO, EDAD, EMBARAZO, DIABETES,
@@ -15,6 +15,8 @@ sidebar()
 st.title('Predicción de Mortalidad por COVID')
 dummy_text()
 markdown_h('Información del Paciente', 3)
+
+# Form
 with st.form('Form') as form:
     col1, col2 = st.columns(2)
     # First column
@@ -48,6 +50,24 @@ with st.form('Form') as form:
         'TABAQUISMO': taba,
         'DIAS_SINTOMAS': int(dias_sint)
     }
-    # prediction = predict_mort_pred(input)
-    # 
+
     st.form_submit_button('Predecir')
+
+# Making prediction
+prediction = predict_mort_pred({})
+decease_pct = round(prediction * 100, 3)
+_, risk_clfn, risk_advice = get_prediction_info(prediction)
+
+# Prediction Results
+markdown_h('Resultados', 1)
+c1, c2 = st.columns((1, 2))
+## Prediction Percentage
+markdown_h('Probabilidad de Muerte', 3, widget=c1)
+decease_pct = round(decease_pct, 3)
+c1.metric('', f'{decease_pct} %')
+c1.progress(decease_pct / 100)
+## More information about prediction
+markdown_h('Clasificación', 3, widget=c2)
+c2.markdown(f'##### {risk_clfn} #####')
+markdown_h('Indicaciones', 3, widget=c2)
+c2.write(risk_advice)
