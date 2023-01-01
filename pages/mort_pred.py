@@ -5,8 +5,8 @@ from utils.pred_utils import predict_mort_pred, get_prediction_info
 # Inputs must be
 # SEXO, EDAD, EMBARAZO, DIABETES,
 # EPOC, ASMA, INMUSPR, HIPERTENSION,
-# OTRAS_COM, OBESIDAD, RENAL_CRONICA, TABAQUISMO,
-# DIAS_SINTOMAS
+# OTRA_COM, OBESIDAD, CARDIOVASCULAR, RENAL_CRONICA
+# TABAQUISMO, DIAS_SINTOMAS
 
 # Sidebar
 sidebar()
@@ -31,20 +31,23 @@ with st.form('Form') as form:
     sexo = col2.radio('Sexo', ('Hombre', 'Mujer'), key='sexo')
     hiper = col2.radio('¿Tiene hipertensión?', ('No', 'Sí'), key='hiper')
     obes = col2.radio('¿Sufre de obesidad?', ('No', 'Sí'), key='obesidad')
+    cardio = col2.radio('¿Sufre de alguna enfermedad cardiovascular?', ('No', 'Sí'), key='cardio')
     renal = col2.radio('¿Tiene afecciones renales crónicas?', ('No', 'Sí'), key='renal')
     taba = col2.radio('¿Sufre de tabaquismo?', ('No', 'Sí'), key='tabaquismo')
     otra = col2.radio('¿Sufre de alguna otra afección grave?', ('No', 'Sí'), key='otra-com')
     # Preparing input for remote model prediction
     pacient_info = {
         'EDAD': int(edad),
+        'SEXO': sexo,
         'EMBARAZO': embar,
         'DIABETES': diab,
         'EPOC': epoc,
         'ASMA': asma,
         'INMUSUPR': inmu,
         'HIPERTENSION': hiper,
-        'OTRAS_COM': otra,
+        'OTRA_COM': otra,
         'OBESIDAD': obes,
+        'CARDIOVASCULAR': cardio,
         'RENAL_CRONICA': renal,
         'TABAQUISMO': taba,
         'DIAS_SINTOMAS': int(dias_sint)
@@ -53,7 +56,7 @@ with st.form('Form') as form:
     st.form_submit_button('Predecir')
 
 # Making prediction
-prediction = predict_mort_pred(pacient_info)
+prediction = predict_mort_pred(pacient_info, mocked=False)
 _, risk_clfn, risk_advice = get_prediction_info(prediction)
 
 # Prediction Results
