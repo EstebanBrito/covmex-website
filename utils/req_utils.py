@@ -3,9 +3,9 @@ import requests
 def make_request(data_json, type:str='local'):
     # Choose URL
     if type == 'local':
-        url = 'http://0.0.0.0:3000/predict'
+        url = 'http://0.0.0.0:8000/predict'
     elif type == 'remote':
-        url = 'smth/predict'
+        url = 'https://something.com/predict'
     # Make request
     response = requests.post(
         url,

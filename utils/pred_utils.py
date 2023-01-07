@@ -1,7 +1,6 @@
 import json
 from .req_utils import make_request
 import random
-from time import sleep
 
 def map_value(value:any) -> int:
     # Map YES/NO inputs
@@ -23,11 +22,10 @@ def predict_mort_pred(input:dict, mocked:bool=True):
     cleaned_input = clean_input(input)
     input_json = json.dumps(cleaned_input)
     # Make request, get response
-    if mocked: response_json = [ [ random.random() ] ]
+    if mocked: response_json = { 'prediction': random.random() }
     else: response_json = make_request(input_json)
     # Preprocess response
-    prediction = response_json # json.loads(response_json) # response_json is already a list: no need to parse it from JSON
-    prediction = prediction[0][0] # [instances][prediction_outputs]
+    prediction = response_json['prediction']
     return prediction
 
 def get_prediction_info(prediction):
