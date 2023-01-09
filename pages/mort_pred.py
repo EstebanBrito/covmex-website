@@ -20,10 +20,12 @@ st.write('''
     Para usar el servicio, rellene el formulario debajo y
     presione el boton "Predecir" cuando esté listo. Podrá ver
     sus resultados y las explicaciones pertinentes de éste en
-    la parte de abajo de la pagina. \n
-    ATENCIÓN: Las predicciones de este servicio no reemplazan
+    la parte de abajo de la pagina.
+''')
+st.markdown('''
+    **ADVERTENCIA: Las predicciones de este servicio no reemplazan
     el tratamiento y diagnóstico de médicos profesionales. Acuda
-    a un médico para obtener una opinión más completa.
+    a un médico para obtener una opinión más completa.**
 ''')
 markdown_h('Información del Paciente', 3)
 
@@ -83,3 +85,19 @@ markdown_h('Clasificación', 3, ctx=c2)
 c2.markdown(f'##### {risk_clfn} #####')
 markdown_h('Indicaciones', 3, ctx=c2)
 c2.write(risk_advice)
+## Explaining the Results
+markdown_h('¿Que significan estos resultados?', 4)
+exp = st.expander('Presiona para conocer más', expanded=False)
+exp.write('''
+    La probabilidad de muerte es calculada con una técnica de
+    Inteligencia Artificial llamada Bosque Aleatorio,
+    y determina el porcentaje de personas
+    parecidas al paciente en cuestión que fallecieron debido a
+    COVID-19 en los últimos tres meses. \n
+    Este porcentaje determina el nivel de riesgo en el que se
+    encuentra el paciente y las indicaciones recomendadas:
+    * Riesgo Bajo: Menos de 1 de cada 3 personas similares al paciente fallecieron debido a COVID-19. Si el paciente guarda reposo y cuidados adecuados, no debería complicarse su situación médica.
+    * Riesgo Medio: Alrededor de la mitad de las personas similares al paciente fallecieron, y es necesario un diagnóstico médico para determinar si el paciente se encuentra en riesgo o no, y emitir indicaciones adecuadas.
+    * Riesgo Alto: Al menos 2 de cada 3 personas similares al paciente fallecieron debido a COVID-19. Es muy probable que la situación médica de la persona empeore y debería ser atendida por un médico a la brevedad.
+''')
+exp.markdown('Puedes conocer a mayor profundidad cómo funciona nuestra tecnología [aquí]()')
