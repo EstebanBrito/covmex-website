@@ -1,9 +1,7 @@
 import streamlit as st
-from utils.st_utils import markdown_h, sidebar, dummy_text, person
+from utils.st_utils import markdown_h, dummy_text, person
 
-if __name__ == '__main__':
-    sidebar()
-
+def render_home_page():
     st.title('Plataforma Covid Mexico (CovMex)')
     markdown_h('¿Qué Somos?', 2)
     st.write('''
