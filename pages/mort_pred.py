@@ -12,8 +12,19 @@ from utils.pred_utils import predict_mort_pred, get_prediction_info
 sidebar()
 
 # Actual page
-st.title('Predicción de Mortalidad por COVID')
-dummy_text()
+st.title('Predicción de Mortalidad por COVID-19')
+st.write('''
+    Este servicio está destinado para predecir la probabilidad
+    de muerte de una persona infectada por COVID-19, basándose
+    en su información general y médica. \n
+    Para usar el servicio, rellene el formulario debajo y
+    presione el boton "Predecir" cuando esté listo. Podrá ver
+    sus resultados y las explicaciones pertinentes de éste en
+    la parte de abajo de la pagina. \n
+    ATENCIÓN: Las predicciones de este servicio no reemplazan
+    el tratamiento y diagnóstico de médicos profesionales. Acuda
+    a un médico para obtener una opinión más completa.
+''')
 markdown_h('Información del Paciente', 3)
 
 # Form
@@ -33,7 +44,7 @@ with st.form('Form') as form:
     obes = col2.radio('¿Sufre de obesidad?', ('No', 'Sí'), key='obesidad')
     cardio = col2.radio('¿Sufre de alguna enfermedad cardiovascular?', ('No', 'Sí'), key='cardio')
     renal = col2.radio('¿Tiene afecciones renales crónicas?', ('No', 'Sí'), key='renal')
-    taba = col2.radio('¿Sufre de tabaquismo?', ('No', 'Sí'), key='tabaquismo')
+    taba = col2.radio('¿Suele fumar con frecuencia?', ('No', 'Sí'), key='tabaquismo')
     otra = col2.radio('¿Sufre de alguna otra afección grave?', ('No', 'Sí'), key='otra-com')
     # Preparing input for remote model prediction
     pacient_info = {
