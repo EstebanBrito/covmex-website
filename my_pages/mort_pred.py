@@ -28,44 +28,45 @@ def render_mort_pred_page():
 
     # Form
     with st.form('Form') as form:
+        # Form will have two columns
         col1, col2 = st.columns(2)
         # First column
         edad = col1.number_input('Edad', min_value=0, max_value=125, value=25, step=1, format='%d', help='', key='edad')
+        sexo = col1.radio('Sexo', ('Hombre', 'Mujer'), key='sexo')
         embar = col1.radio('¿Está embarazada?', ('No', 'Sí'), key='embarazo')
         diab = col1.radio('¿Tiene diabetes?', ('No', 'Sí'), key='diabetes')
         epoc = col1.radio('¿Tiene EPOC (Enfermedad Pulmonar Obstructiva Crónica)?', ('No', 'Sí'), key='epoc')
         asma = col1.radio('¿Tiene asma?', ('No', 'Sí'), key='asma')
         inmu = col1.radio('¿Padece de inmunosupresión?', ('No', 'Sí'), key='inmusupr')
-        dias_sint = col1.select_slider('¿Hace cuántos días presentó síntomas?', range(0, 15), value=3, key='dias-sintomas')
         # Second column
-        sexo = col2.radio('Sexo', ('Hombre', 'Mujer'), key='sexo')
         hiper = col2.radio('¿Tiene hipertensión?', ('No', 'Sí'), key='hiper')
         obes = col2.radio('¿Sufre de obesidad?', ('No', 'Sí'), key='obesidad')
         cardio = col2.radio('¿Sufre de alguna enfermedad cardiovascular?', ('No', 'Sí'), key='cardio')
         renal = col2.radio('¿Tiene afecciones renales crónicas?', ('No', 'Sí'), key='renal')
         taba = col2.radio('¿Suele fumar con frecuencia?', ('No', 'Sí'), key='tabaquismo')
         otra = col2.radio('¿Sufre de alguna otra afección grave?', ('No', 'Sí'), key='otra-com')
-        # Preparing input for remote model prediction
-        pacient_info = {
-            'EDAD': int(edad),
-            'SEXO': sexo,
-            'EMBARAZO': embar,
-            'DIABETES': diab,
-            'EPOC': epoc,
-            'ASMA': asma,
-            'INMUSUPR': inmu,
-            'HIPERTENSION': hiper,
-            'OTRA_COM': otra,
-            'OBESIDAD': obes,
-            'CARDIOVASCULAR': cardio,
-            'RENAL_CRONICA': renal,
-            'TABAQUISMO': taba,
-            'DIAS_SINTOMAS': int(dias_sint)
-        }
+        dias_sint = col2.select_slider('¿Hace cuántos días presentó síntomas?', range(0, 15), value=3, key='dias-sintomas')
         # Form submission button
         st.form_submit_button('Predecir')
 
     # Making prediction
+    ## Preparing input for remote model prediction
+    pacient_info = {
+        'EDAD': int(edad),
+        'SEXO': sexo,
+        'EMBARAZO': embar,
+        'DIABETES': diab,
+        'EPOC': epoc,
+        'ASMA': asma,
+        'INMUSUPR': inmu,
+        'HIPERTENSION': hiper,
+        'OTRA_COM': otra,
+        'OBESIDAD': obes,
+        'CARDIOVASCULAR': cardio,
+        'RENAL_CRONICA': renal,
+        'TABAQUISMO': taba,
+        'DIAS_SINTOMAS': int(dias_sint)
+    }
     prediction = predict_mort_pred(pacient_info, mocked=False)
     _, risk_clfn, risk_advice = get_prediction_info(prediction)
 
@@ -79,11 +80,11 @@ def render_mort_pred_page():
     c1.progress(prediction)
     ## More information about prediction
     markdown_h('Clasificación', 3, ctx=c2)
-    c2.markdown(f'##### {risk_clfn} #####')
+    markdown_h(risk_clfn, 5, ctx=c2)
     markdown_h('Indicaciones', 3, ctx=c2)
     c2.write(risk_advice)
     ## Explaining the Results
-    markdown_h('¿Que significan estos resultados?', 4)
+    markdown_h('¿Qué significan estos resultados?', 4)
     exp = st.expander('Presiona para conocer más', expanded=False)
     exp.write('''
         La probabilidad de muerte es calculada con una técnica de
@@ -97,4 +98,4 @@ def render_mort_pred_page():
         * Riesgo Medio: Alrededor de la mitad de las personas similares al paciente fallecieron, y es necesario un diagnóstico médico para determinar si el paciente se encuentra en riesgo o no, y emitir indicaciones adecuadas.
         * Riesgo Alto: Al menos 2 de cada 3 personas similares al paciente fallecieron debido a COVID-19. Es muy probable que la situación médica de la persona empeore y debería ser atendida por un médico a la brevedad.
     ''')
-    exp.markdown('Puedes conocer a mayor profundidad cómo funciona nuestra tecnología [aquí]()')
+    # exp.markdown('Puedes conocer a mayor profundidad cómo funciona nuestros servicios en la sección "Nuestra tecnología", presente en el menú lateral')

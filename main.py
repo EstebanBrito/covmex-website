@@ -2,6 +2,11 @@ import streamlit as st
 from my_pages.home import render_home_page
 from my_pages.mort_pred import render_mort_pred_page
 
+st.set_page_config(
+    page_title="Plataforma Covid Mexico",
+    initial_sidebar_state='expanded'
+)
+
 pages = {
     'mort_pred': render_mort_pred_page,
     'home': render_home_page
@@ -16,15 +21,10 @@ def buttons():
 
 
 if __name__ == '__main__':
-    # Metadata
-    st.set_page_config(
-        page_title="Plataforma Covid Mexico",
-    )
-
     # Global sidebar
-    st.sidebar.header('Nuestras páginas')
+    st.sidebar.markdown('# Menú Lateral #')
+    st.sidebar.markdown('### Selecciona una página ###')
     selected_page = buttons()
-    st.sidebar.image('assets/logo.jpg', width=50)
 
     # Store current_page to remember it
     if selected_page is None:
