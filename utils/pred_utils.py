@@ -23,7 +23,7 @@ def predict_mort_pred(input:dict, mocked:bool=True):
     input_json = json.dumps(cleaned_input)
     # Make request, get response
     if mocked: response_json = { 'prediction': random.random() }
-    else: response_json = make_request(input_json)
+    else: response_json = make_request(input_json, type='remote')
     # Preprocess response
     prediction = response_json['prediction']
     return prediction

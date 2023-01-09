@@ -5,7 +5,7 @@ def make_request(data_json, type:str='local'):
     if type == 'local':
         url = 'http://0.0.0.0:8000/predict'
     elif type == 'remote':
-        url = 'https://something.com/predict'
+        url = 'https://mort-pred-api.herokuapp.com/predict'
     # Make request
     response = requests.post(
         url,
