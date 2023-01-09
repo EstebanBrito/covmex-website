@@ -21,6 +21,6 @@ def dummy_text(paragraphs=1, ctx=st):
     ctx.write(final_text)
 
 def person(name, role, photo_path='assets/logo.jpg', ctx=st):
-    ctx.image(photo_path, width=50)
+    ctx.image(photo_path, width=100)
     ctx.markdown(f'**{name}**') # Bold
     ctx.markdown(f'_{role}_') # Italic
