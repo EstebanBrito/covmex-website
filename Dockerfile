@@ -3,4 +3,4 @@ WORKDIR /website
 COPY ./requirements.txt requirements.txt
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
 COPY . .
-CMD streamlit run main.py --server.address 0.0.0.0 --server.port $PORT
+CMD streamlit run src/main.py --server.address 0.0.0.0 --server.port $PORT

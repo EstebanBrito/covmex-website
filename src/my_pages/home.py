@@ -24,9 +24,10 @@ def render_home_page():
     # dummy_text()
     markdown_h('Conoce al equipo', 2)
     cols = st.columns(4)
-    person('Esteban Brito', 'Científico de Datos', photo_path='assets/esteban.jpg', ctx=cols[0])
-    person('Daniel Cruz', 'Ingeniero de Datos', photo_path='assets/daniel.jpg', ctx=cols[1])
-    person('Héctor Ruiz', 'Analista de Datos', photo_path='assets/hector.jpg', ctx=cols[2])
-    person('Esperanza Ek', 'Analista de Datos', photo_path='assets/esperanza.jpg', ctx=cols[3])
+    # paths are relative to projects' root folder
+    person('Esteban Brito', 'Científico de Datos', photo_path='src/assets/esteban.jpg', ctx=cols[0])
+    person('Daniel Cruz', 'Ingeniero de Datos', photo_path='src/assets/daniel.jpg', ctx=cols[1])
+    person('Héctor Ruiz', 'Analista de Datos', photo_path='src/assets/hector.jpg', ctx=cols[2])
+    person('Esperanza Ek', 'Analista de Datos', photo_path='src/assets/esperanza.jpg', ctx=cols[3])
 
 
