@@ -1,11 +1,11 @@
 import requests
+import os
+
+api_url = os.environ['API_BASE_URL']
 
 def make_request(data_json, type:str='local'):
-    # Choose URL
-    if type == 'local':
-        url = 'http://0.0.0.0:8000/predict'
-    elif type == 'remote':
-        url = 'https://mort-pred-api.herokuapp.com/predict'
+    # Create URL
+    url = f'{api_url}/predict'
     # Make request
     response = requests.post(
         url,
