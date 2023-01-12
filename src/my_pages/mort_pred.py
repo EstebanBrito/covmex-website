@@ -2,6 +2,14 @@ import streamlit as st
 from utils.st_utils import markdown_h, dummy_text
 from utils.pred_utils import predict_mort_pred, get_prediction_info
 
+def format_sex(sex):
+    if sex == 'Hombre': return 'Man'
+    elif sex == 'Mujer': return 'Woman'
+
+def format_yes_no(opt):
+    if opt == 'Sí': return 'Yes'
+    elif opt == 'No': return 'No'
+
 # Inputs must be
 # SEXO, EDAD, EMBARAZO, DIABETES,
 # EPOC, ASMA, INMUSPR, HIPERTENSION,
@@ -9,45 +17,47 @@ from utils.pred_utils import predict_mort_pred, get_prediction_info
 # TABAQUISMO, DIAS_SINTOMAS
 def render_mort_pred_page():
     # Actual page
-    st.title('Predicción de Mortalidad por COVID-19')
+    st.title('COVID-19 Mortality Prediction')
     st.write('''
-        Este servicio está destinado para predecir la probabilidad
-        de muerte de una persona infectada por COVID-19, basándose
-        en su información general y médica. \n
-        Para usar el servicio, rellene el formulario debajo y
-        presione el boton "Predecir" cuando esté listo. Podrá ver
-        sus resultados y las explicaciones pertinentes de éste en
-        la parte de abajo de la pagina.
+        This service predicts the probability of death of a COVID-19
+        infected person, taking into consideration medical and general
+        information. \n
+        It order to use the service, fill up the form below, and click
+        the "Predict" button when you're ready. Your results will be
+        shown at the bottom of the webpage. Be sure to read the 
+        explanations about what they represent, too! \n
     ''')
     st.markdown('''
-        **ADVERTENCIA: Las predicciones de este servicio no reemplazan
-        el tratamiento y diagnóstico de médicos profesionales. Acuda
-        a un médico para obtener una opinión más completa.**
+        **DISCLAIMER: The predictions of this service DO NOT
+        substitute the diagnose of a certified health professional.
+        Our goal is to give a quick assessment of a patient's situation,
+        not to provide medical treatment. Go to the hospital if you
+        ever need to.**
     ''')
-    markdown_h('Información del Paciente', 3)
+    markdown_h('Pacient\'s information', 3)
 
     # Form
     with st.form('Form') as form:
         # Form will have two columns
         col1, col2 = st.columns(2)
         # First column
-        edad = col1.number_input('Edad', min_value=0, max_value=125, value=25, step=1, format='%d', help='', key='edad')
-        sexo = col1.radio('Sexo', ('Hombre', 'Mujer'), key='sexo')
-        embar = col1.radio('¿Está embarazada?', ('No', 'Sí'), key='embarazo')
-        diab = col1.radio('¿Tiene diabetes?', ('No', 'Sí'), key='diabetes')
-        epoc = col1.radio('¿Tiene EPOC (Enfermedad Pulmonar Obstructiva Crónica)?', ('No', 'Sí'), key='epoc')
-        asma = col1.radio('¿Tiene asma?', ('No', 'Sí'), key='asma')
-        inmu = col1.radio('¿Padece de inmunosupresión?', ('No', 'Sí'), key='inmusupr')
+        edad = col1.number_input('Age', min_value=0, max_value=125, value=25, step=1, format='%d', help='', key='edad')
+        sexo = col1.radio('Sex', ('Hombre', 'Mujer'), format_func=format_sex, key='sexo')
+        embar = col1.radio('Are you pregnant?', ('No', 'Sí'), format_func=format_yes_no, key='embarazo')
+        diab = col1.radio('Do you have diabetes?', ('No', 'Sí'), format_func=format_yes_no, key='diabetes')
+        epoc = col1.radio('¿Do you have COPD (Chronic Obstructive Pulmonary Disease)?', ('No', 'Sí'), format_func=format_yes_no, key='epoc')
+        asma = col1.radio('Do you have asthma?', ('No', 'Sí'), format_func=format_yes_no, key='asma')
+        inmu = col1.radio('Do you suffer from immunosupression?', ('No', 'Sí'), format_func=format_yes_no, key='inmusupr')
         # Second column
-        hiper = col2.radio('¿Tiene hipertensión?', ('No', 'Sí'), key='hiper')
-        obes = col2.radio('¿Sufre de obesidad?', ('No', 'Sí'), key='obesidad')
-        cardio = col2.radio('¿Sufre de alguna enfermedad cardiovascular?', ('No', 'Sí'), key='cardio')
-        renal = col2.radio('¿Tiene afecciones renales crónicas?', ('No', 'Sí'), key='renal')
-        taba = col2.radio('¿Suele fumar con frecuencia?', ('No', 'Sí'), key='tabaquismo')
-        otra = col2.radio('¿Sufre de alguna otra afección grave?', ('No', 'Sí'), key='otra-com')
-        dias_sint = col2.select_slider('¿Hace cuántos días presentó síntomas?', range(0, 15), value=3, key='dias-sintomas')
+        hiper = col2.radio('Do you have hypertension?', ('No', 'Sí'), format_func=format_yes_no, key='hiper')
+        obes = col2.radio('Do you suffer from obesity?', ('No', 'Sí'), format_func=format_yes_no, key='obesidad')
+        cardio = col2.radio('Do you have any other cardiovascular afffections?', ('No', 'Sí'), format_func=format_yes_no, key='cardio')
+        renal = col2.radio('Do you suffer from chronic renal failure?', ('No', 'Sí'), format_func=format_yes_no, key='renal')
+        taba = col2.radio('Do you frequently smoke?', ('No', 'Sí'), format_func=format_yes_no, key='tabaquismo')
+        otra = col2.radio('Do you have any other relevant additional affections?', ('No', 'Sí'), format_func=format_yes_no, key='otra-com')
+        dias_sint = col2.select_slider('How many days ago did the first symptoms appear?', range(0, 15), value=3, key='dias-sintomas')
         # Form submission button
-        st.form_submit_button('Predecir')
+        st.form_submit_button('Predict')
 
     # Making prediction
     ## Preparing input for remote model prediction
@@ -71,31 +81,31 @@ def render_mort_pred_page():
     _, risk_clfn, risk_advice = get_prediction_info(prediction)
 
     # Prediction Results
-    markdown_h('Resultados', 1)
+    markdown_h('Results', 1)
     c1, c2 = st.columns((1, 2))
     ## Prediction Percentage
-    markdown_h('Probabilidad de Muerte', 3, ctx=c1)
+    markdown_h('Probability of Death', 3, ctx=c1)
     prediction_pct = round(prediction*100, 2)
     c1.metric(value=f'{prediction_pct} %', label='_', label_visibility='hidden')
     c1.progress(prediction)
     ## More information about prediction
-    markdown_h('Clasificación', 3, ctx=c2)
+    markdown_h('Classification', 3, ctx=c2)
     markdown_h(risk_clfn, 5, ctx=c2)
-    markdown_h('Indicaciones', 3, ctx=c2)
+    markdown_h('Indications', 3, ctx=c2)
     c2.write(risk_advice)
     ## Explaining the Results
-    markdown_h('¿Qué significan estos resultados?', 4)
-    exp = st.expander('Presiona para conocer más', expanded=False)
+    markdown_h('What do these results represent?', 4)
+    exp = st.expander('Click to know more...', expanded=False)
     exp.write('''
-        La probabilidad de muerte es calculada con una técnica de
-        Inteligencia Artificial llamada Bosque Aleatorio,
-        y determina el porcentaje de personas
-        parecidas al paciente en cuestión que fallecieron debido a
-        COVID-19 en los últimos tres meses. \n
-        Este porcentaje determina el nivel de riesgo en el que se
-        encuentra el paciente y las indicaciones recomendadas:
-        * Riesgo Bajo: Menos de 1 de cada 3 personas similares al paciente fallecieron debido a COVID-19. Si el paciente guarda reposo y cuidados adecuados, no debería complicarse su situación médica.
-        * Riesgo Medio: Alrededor de la mitad de las personas similares al paciente fallecieron, y es necesario un diagnóstico médico para determinar si el paciente se encuentra en riesgo o no, y emitir indicaciones adecuadas.
-        * Riesgo Alto: Al menos 2 de cada 3 personas similares al paciente fallecieron debido a COVID-19. Es muy probable que la situación médica de la persona empeore y debería ser atendida por un médico a la brevedad.
+        The probability of death is calculated using an Artificial
+        Intelligence model called Random Forest, which,
+        given the information of a person, determines
+        the percentage of similar cases of people that died due
+        to COVID-19 in the last three months. \n
+        This percentage determines both the risk the patient faces
+        and the general indications he/she should follow:
+        * Low Risk: Less than 1 of every 3 similar patients died due to COVID-19. If the patient keeps rest and proper care, his medical situation should not aggravate.
+        * Medium Risk: About half of the similar patients died due to COVID-19, and a professional medical diagnosis is necessary to determine whether the patient is at risk and to issue appropriate indications.
+        * High Risk: At least 2 out of 3 similar patients died due to COVID-19. The person's medical situation is likely to worsen and should be treated by a doctor as soon as possible.
     ''')
     # exp.markdown('Puedes conocer a mayor profundidad cómo funciona nuestros servicios en la sección "Nuestra tecnología", presente en el menú lateral')

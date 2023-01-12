@@ -30,15 +30,15 @@ def predict_mort_pred(input:dict, mocked:bool=True):
 
 def get_prediction_info(prediction):
     if prediction > 0.66:
-        clfn = 'Riesgo Elevado'
+        clfn = 'High Risk'
         clfn_color = f':red[{clfn}]'
-        advice = 'Riesgo elevado de muerte. Atiéndase a la brevedad.'
+        advice = 'High risk of death. It is imperative to go to the hospital.'
     elif prediction > 0.33:
-        clfn = 'Riesgo Medio'
+        clfn = 'Medium Risk'
         clfn_color = f':orange[{clfn}]'
-        advice = 'Posible riesgo de muerte. Consulte a un médico para un diagnóstico más certero.'
+        advice = 'There exists a medium risk of death. It is highly advisable to visit a doctor for a professional diagnosis.'
     elif prediction > 0.0:
-        clfn = 'Riesgo Bajo'
+        clfn = 'Low Risk'
         clfn_color = f':blue[{clfn}]'
-        advice = 'Riesgo bajo de muerte. No son necesarios cuidados mayores en este caso.'
+        advice = 'Low risk of death. No specialized medical care is needed in this case.'
     return clfn, clfn_color, advice
