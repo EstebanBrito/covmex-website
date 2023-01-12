@@ -3,7 +3,7 @@ from my_pages.home import render_home_page
 from my_pages.mort_pred import render_mort_pred_page
 
 st.set_page_config(
-    page_title="Plataforma Covid Mexico",
+    page_title="Covid Mexico Platform",
     initial_sidebar_state='expanded'
 )
 
@@ -13,8 +13,8 @@ pages = {
 }
 
 def buttons():
-    home = st.sidebar.button('Inicio', key='home-button')
-    mort = st.sidebar.button('Predicción de Mortalidad', key='mort-pred-button')
+    home = st.sidebar.button('Home', key='home-button')
+    mort = st.sidebar.button('Mortality Prediction', key='mort-pred-button')
     if mort: return 'mort_pred'
     elif home: return 'home'
     else: return None
@@ -22,8 +22,8 @@ def buttons():
 
 if __name__ == '__main__':
     # Global sidebar
-    st.sidebar.markdown('# Menú Lateral #')
-    st.sidebar.markdown('### Selecciona una página ###')
+    st.sidebar.markdown('# Lateral Menu #')
+    st.sidebar.markdown('### Select a Page ###')
     selected_page = buttons()
 
     # Store current_page to remember it
