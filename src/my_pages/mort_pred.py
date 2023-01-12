@@ -32,7 +32,9 @@ def render_mort_pred_page():
         substitute the diagnose of a certified health professional.
         Our goal is to give a quick assessment of a patient's situation,
         not to provide medical treatment. Go to the hospital if you
-        ever need to.**
+        ever need to. Also, this service was created taking into 
+        consideration only confirmed cases of COVID-19, so it does not work
+        to assess other affections.**
     ''')
     markdown_h('Pacient\'s information', 3)
 
@@ -97,15 +99,30 @@ def render_mort_pred_page():
     markdown_h('What do these results represent?', 4)
     exp = st.expander('Click to know more...', expanded=False)
     exp.write('''
-        The probability of death is calculated using an Artificial
-        Intelligence model called Random Forest, which,
-        given the information of a person, determines
-        the percentage of similar cases of people that died due
-        to COVID-19 in the last three months. \n
-        This percentage determines both the risk the patient faces
-        and the general indications he/she should follow:
-        * Low Risk: Less than 1 of every 3 similar patients died due to COVID-19. If the patient keeps rest and proper care, his medical situation should not aggravate.
-        * Medium Risk: About half of the similar patients died due to COVID-19, and a professional medical diagnosis is necessary to determine whether the patient is at risk and to issue appropriate indications.
-        * High Risk: At least 2 out of 3 similar patients died due to COVID-19. The person's medical situation is likely to worsen and should be treated by a doctor as soon as possible.
+        This service was built using an Artificial Intelligence (AI)
+        model called Random Forest, which, given the information
+        of a person, determines if he/she is going to die due to
+        COVID-19, and also returns a "confidence score" that specifies
+        the confidence of the prediction. \n
+        A Random Forest uses under the hood a high number of "dumb"
+        auxiliary models, called Decision Trees, that are trained to estimate the probability
+        of death of people belonging to different sectors of the population.
+        The confidence score is computed by averaging the probabilities of all the trees,
+        but a 40\% confidence ratio, for example, should not be interpreted as "4 out
+        of every 10 similar patients died due to COVID-19", because each
+        tree only analyzes a specific sector of the patient population,
+        not all individuals, and thus, the probability of an individual
+        tree is likely to be wrong. \n
+        However, when probabilities are aggregated, we obtain a score that,
+        when it's higher than 50%, can accurately detect patients in
+        risk of death. This behavior is analogous to the concept of "wisdom
+        of the crowd", where the opinion of a single "tree" is likely
+        to be wrong or incomplete, but the opinion of the whole "forest" can
+        be accurate and reliable. \n
+        The confidence score is also used to determine the patient's
+        risk level and the general indications he/she should follow: \n
+        * Low Risk: A score lower than 40\% means that the patient IS NOT likely to die due to COVID-19, and if the patient keeps rest and proper care, his/her medical situation should not aggravate..
+        * Medium Risk: AI models are not perfect, and a confidence score around 50\% means the prediction could be either right or wrong, and additional information is required, such as the opinion of a professional medic.
+        * High Risk: High Risk: A score higher than 60% means the patient IS likely to die due to COVID-19 and he/she should be treated by medical professionals as soon as possible.
     ''')
     # exp.markdown('Puedes conocer a mayor profundidad cómo funciona nuestros servicios en la sección "Nuestra tecnología", presente en el menú lateral')
